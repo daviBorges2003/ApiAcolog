@@ -1,0 +1,6 @@
+@AcologAPI_HostAddress = http://localhost:5169
+
+GET {{AcologAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
