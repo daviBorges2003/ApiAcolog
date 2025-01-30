@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using AcologAPI.src.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace AcologAPI.src.Infrastructure.Persistence
+namespace Infrastructure.Persistence
 {
     public class MyDbContext : DbContext
     {
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) {}
 
+        //Usar da Próxima vez: dotnet ef migrations add InitialCreate --output-dir Your/Directory
         public DbSet<Users> Users {get; set;}
         public DbSet<Vehicle> Vehicles {get;set;}
 
