@@ -15,8 +15,9 @@
 *.sln.docstates
 
 ##Token
-.token/
+token/
 client_secret.json
+Google.Apis.Auth.OAuth2.Responses.TokenResponse-user
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
