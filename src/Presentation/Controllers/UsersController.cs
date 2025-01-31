@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AcologAPI.src.Application.Services;
+using AcologAPI.src.Domain.Entities;
 using Application.DTOs;
 using Application.Interfaces;
 using Application.Services;
@@ -87,10 +89,78 @@ namespace AcologAPI.src.Presentation.Controllers
             }
         }
 
-        //TODO: 31/01/2025
+        [HttpPost("/user")]
+        public IActionResult Create([FromBody]Users user)
+        {
+            try
+            {
+                var newUser = _userServices.Create(user);
+                var emailMessage = new EmailService("client_secret.json", "token");
 
-        //Users Create (Users user); // Create
-        //Users Update (Users user); //Atualizar
-        //Users Delete (Users user); // Deletar
+                if(newUser == null)
+                {
+                    return NotFound(new {message = "Informações invalidas!"});
+                }
+
+                //Colocar Email, Titulo, Body
+                emailMessage.SendEmail("KKKKK", "KKKKK", "KKKKK");
+                return Created();
+            }
+
+            catch(Exception ex)
+            {
+                return StatusCode(500, new {message = "Erro ao Criar usuario", error = ex.Message});
+            }
+        }
+
+        [HttpPut("/user/{id:int}")]
+        public IActionResult Update(int id,[FromBody]Users user)
+        {   
+            try
+            {
+                var findUser = _userServices.FindOne(id);
+
+                if(findUser == null)
+                {
+                    return NotFound(new {message = "Usuário não encontrado!" });
+                }
+
+                findUser.Name = user.Name ?? findUser.Name;
+                findUser.Email = user.Email ?? findUser.Email;
+                findUser.Password = user.Password ?? findUser.Password;
+                findUser.Profile = user.Profile ?? findUser.Profile;
+
+                _userServices.Update(findUser);
+
+                return Ok(findUser);
+            }
+
+            catch(Exception ex)
+            {
+                return StatusCode(304, new {message = "Erro ao Criar usuario", error = ex.Message});
+            }            
+        }
+        
+        [HttpDelete("/user/{id:int}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                var findUser = _userServices.FindOne(id);
+
+                if(findUser == null)
+                {
+                    return NotFound(new {message = "Usuário não encontrado!" });
+                }
+                _userServices.Delete(findUser);
+
+                return Ok(new { message = "Useuario deletado!!"});
+            }
+
+            catch(Exception ex)
+            {
+                return StatusCode(500, new {message = "Erro ao Criar usuario", error = ex.Message});
+            }        
+        }
     }
 }

@@ -18,20 +18,19 @@ namespace Application.Services
         {
             _context = db;
         }
-        public Users Create(Users user)
-        {
-            _context.Users.Add(user);
-            _context.SaveChanges();
 
-            return user;
+        public Users? Login(LoginDTO loginDTO)
+        {
+            var adm = _context.Users.Where(
+                res => res.Email == loginDTO.Email && res.Password == loginDTO.Password
+            ).FirstOrDefault();
+
+            return adm;
         }
 
-        public Users Delete(Users user)
+        public Users? FindOne(int id)
         {
-            _context.Users.Remove(user);
-            _context.SaveChanges();
-
-            return user;
+            return _context.Users.Where(res => res.Id == id).FirstOrDefault();
         }
 
         public List<Users> FindAll(int? pagina)
@@ -48,29 +47,25 @@ namespace Application.Services
             return query.ToList(); 
         }
 
-        public Users? FindOne(int id)
+        public Users Create(Users user)
         {
-            return _context.Users.Where(res => res.Id == id).FirstOrDefault();
-        }
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
-        public Users? Login(LoginDTO loginDTO)
-        {
-            var adm = _context.Users.Where(
-                res => res.Email == loginDTO.Email && res.Password == loginDTO.Password
-            ).FirstOrDefault();
-
-            return adm;
-        }
-
-        public Users Update(Users user)
-        {
-            _context.Users.Update(user);
             return user;
         }
 
-        public static implicit operator UserServices(UsersController v)
+        public void Update(Users user)
         {
-            throw new NotImplementedException();
+            _context.Users.Update(user);
+            _context.SaveChanges();
         }
+ 
+        public void Delete(Users user)
+        {
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+        }
+
     }
 }
