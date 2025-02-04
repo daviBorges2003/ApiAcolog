@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -20,6 +21,9 @@ namespace AcologAPI.src.Application.Services
     {
         static string[] Scopes = { GmailService.Scope.GmailSend, GmailService.Scope.GmailReadonly};
         private GmailService _service;
+        private string emailFrom = DotNetEnv.Env.GetString("EMAIL_PADRAO");
+        private string userFrom = DotNetEnv.Env.GetString("EMAIL_USER");
+
         public EmailService(string credentialPath, string tokenPath)
         {
             using var stream = new FileStream(credentialPath, FileMode.Open, FileAccess.Read);
@@ -44,19 +48,19 @@ namespace AcologAPI.src.Application.Services
                 ApplicationName = "Gmail APi .NEt"
             });
         }
+
         public void SendEmail(string to, string subject, string body)
         {
             var emailMessage = new MimeMessage();
 
             //User / email
-            emailMessage.From.Add(new MailboxAddress("KKKKK" , "KKKKK"));
+            emailMessage.From.Add(new MailboxAddress(userFrom, emailFrom));
             emailMessage.To.Add(new MailboxAddress("" ,to));
             emailMessage.Subject = subject;
 
-            var BodyBuilder = new BodyBuilder()
-            {
-                TextBody = body
-            };
+            var BodyBuilder = new BodyBuilder();
+
+            BodyBuilder.HtmlBody = string.Format($"{body}");
 
             emailMessage.Body = BodyBuilder.ToMessageBody();
 
