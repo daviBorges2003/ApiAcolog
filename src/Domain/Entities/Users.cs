@@ -20,9 +20,9 @@ namespace AcologAPI.src.Domain.Entities
         [StringLength(255)]
         public string? Email { get; set; }
         
-        [Required]
-        [StringLength(50)]
-        public string? Password { get; set; }
+        public byte[] PasswordHash { get; private set; }
+
+        public byte[] PasswordSalt { get; private set; }
 
         [Required]
         [StringLength(10)]
