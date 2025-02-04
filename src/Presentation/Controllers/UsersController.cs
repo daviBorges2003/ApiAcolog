@@ -90,6 +90,7 @@ namespace AcologAPI.src.Presentation.Controllers
         }
 
         [HttpPost("/user")]
+        
         public IActionResult Create([FromBody]Users user)
         {
             try
@@ -103,7 +104,10 @@ namespace AcologAPI.src.Presentation.Controllers
                 }
 
                 //Colocar Email, Titulo, Body
-                emailMessage.SendEmail("KKKKK", "KKKKK", "KKKKK");
+                emailMessage.SendEmail(
+                    "davi.paula@hotmail.com",
+                    $"Olá Senhor(a), {newUser.Name}",
+                    $"<h1><{newUser.Name}/h1><br/><p>Seja muito bem vindo!</p>");
                 return Created();
             }
 
