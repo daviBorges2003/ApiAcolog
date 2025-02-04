@@ -90,7 +90,7 @@ namespace AcologAPI.src.Presentation.Controllers
         }
 
         [HttpPost("/user")]
-        
+
         public IActionResult Create([FromBody]Users user)
         {
             try
@@ -105,7 +105,7 @@ namespace AcologAPI.src.Presentation.Controllers
 
                 //Colocar Email, Titulo, Body
                 emailMessage.SendEmail(
-                    "davi.paula@hotmail.com",
+                    newUser.Email,
                     $"Olá Senhor(a), {newUser.Name}",
                     $"<h1><{newUser.Name}/h1><br/><p>Seja muito bem vindo!</p>");
                 return Created();
@@ -131,7 +131,7 @@ namespace AcologAPI.src.Presentation.Controllers
 
                 findUser.Name = user.Name ?? findUser.Name;
                 findUser.Email = user.Email ?? findUser.Email;
-                findUser.Password = user.Password ?? findUser.Password;
+                // findUser.PasswordHash = user.PasswordHash ?? findUser.PasswordHash;
                 findUser.Profile = user.Profile ?? findUser.Profile;
 
                 _userServices.Update(findUser);

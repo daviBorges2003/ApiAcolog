@@ -22,7 +22,7 @@ namespace Application.Services
         public Users? Login(LoginDTO loginDTO)
         {
             var adm = _context.Users.Where(
-                res => res.Email == loginDTO.Email && res.Password == loginDTO.Password
+                res => res.Email == loginDTO.Email && res.PasswordHash == loginDTO.PasswordHash
             ).FirstOrDefault();
 
             return adm;
