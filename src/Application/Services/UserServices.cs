@@ -7,65 +7,66 @@ using Infrastructure.Persistence;
 using Application.DTOs;
 using Application.Interfaces;
 using AcologAPI.src.Presentation.Controllers;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using AcologAPI.src.Application.Interfaces;
 
 namespace Application.Services
 {
     public class UserServices : IUsers
     {
-        private readonly MyDbContext _context;
+        private readonly IUserRepository _repository;
+        private readonly IMapper _mapper;
 
-        public UserServices(MyDbContext db)
+        public UserServices(IUserRepository repos, IMapper mapper)
         {
-            _context = db;
+            _repository = repos;
+            _mapper = mapper;
         }
 
-        public Users? Login(LoginDTO loginDTO)
+        public async Task<UserDTO> Create(UserDTO userDTO)
         {
-            var adm = _context.Users.Where(
-                res => res.Email == loginDTO.Email && res.PasswordHash == loginDTO.PasswordHash
-            ).FirstOrDefault();
+            var user = _mapper.Map<Users>(userDTO);
+            var updatedUser = await _repository.Create(user);
 
-            return adm;
+            return _mapper.Map<UserDTO>(updatedUser);
         }
 
-        public Users? FindOne(int id)
+        public async Task<UserDTO> Update(UserDTO userDTO)
         {
-            return _context.Users.Where(res => res.Id == id).FirstOrDefault();
+            var user = _mapper.Map<Users>(userDTO);
+            var updatedUser = await _repository.Update(user);
+
+            return _mapper.Map<UserDTO>(updatedUser);
+        }   
+
+        public async Task<UserDTO> Delete(int id)
+        {
+            var user = await _repository.FindOne(id);
+            var deleteUser = await _repository.Delete(user);
+
+            return _mapper.Map<UserDTO>(deleteUser);
         }
 
-        public List<Users> FindAll(int? pagina)
+        public async Task<IEnumerable<UserDTO>> FindAll(int pagina)
         {
-            var query = _context.Users.AsQueryable();
-
-            int itemsPerPage = 10;
-
-            if(pagina != null)
-            {
-                query = query.Skip(((int)pagina - 1) * itemsPerPage).Take(itemsPerPage);
-            } 
-
-            return query.ToList(); 
+            var users = await _repository.FindAll(pagina);
+            
+            return  _mapper.Map<IEnumerable<UserDTO>>(users);
         }
 
-        public Users Create(Users user)
+        public async Task<UserDTO> FindOne(int id)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            var user = await _repository.FindOne(id);
 
-            return user;
+            return _mapper.Map<UserDTO>(user);
         }
 
-        public void Update(Users user)
+        public Users Login(LoginDTO loginDTO)
         {
-            _context.Users.Update(user);
-            _context.SaveChanges();
+            throw new NotImplementedException();
         }
- 
-        public void Delete(Users user)
-        {
-            _context.Users.Remove(user);
-            _context.SaveChanges();
-        }
+
 
     }
 }

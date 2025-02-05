@@ -9,11 +9,11 @@ namespace Application.Interfaces
 {
     public interface IUsers
     {
-        Users? Login(LoginDTO loginDTO); // v
-        Users? FindOne(int id); // Pegar 1 : v
-        List<Users> FindAll(int? pagina); // Pegar Todos : v
-        Users Create (Users user); // Create
-        void Update (Users user); //Atualizar
-        void Delete (Users user); // Deletar
+        Task<UserDTO> Create(UserDTO userDTO);
+        Task<UserDTO> Update(UserDTO userDTO);
+        Task<UserDTO> Delete(int id);
+        Task<UserDTO> FindOne(int id);
+        Task<IEnumerable<UserDTO>> FindAll(int pagina);
+        Users Login(LoginDTO loginDTO);
     }
 }
