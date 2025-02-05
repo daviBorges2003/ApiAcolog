@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using AcologAPI.src.Application.Interfaces;
+using AcologAPI.src.Infrastructure.Repositories;
+using AcologAPI.src.Infrastructure.Identity;
+using AcologAPI.src.Application.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +44,14 @@ builder.Services.AddAuthentication(opt =>
     }
 );
 
+builder.Services.AddAutoMapper(typeof(DomainToDtoMappingProfile));
+
+//Repository
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+//Services
 builder.Services.AddScoped<IUsers, UserServices>();
+builder.Services.AddScoped<IAuthenticate, AuthenticateService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
