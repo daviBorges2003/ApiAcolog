@@ -17,13 +17,12 @@ namespace AcologAPI.src.Infrastructure.Identity
     public class AuthenticateService : IAuthenticate
     {
         private readonly MyDbContext _context;
-        private readonly IConfiguration _configuration;
 
-        public AuthenticateService(MyDbContext context, IConfiguration configuration)
+        public AuthenticateService(MyDbContext context )
         {
             _context = context;
-            _configuration = configuration;
         }
+        
         public async Task<bool> AuthenticateAsync(string email , string senha)
         {
             var user = await _context.Users.Where(u => u.Email.ToLower() == email.ToLower()).FirstOrDefaultAsync();
@@ -61,7 +60,7 @@ namespace AcologAPI.src.Infrastructure.Identity
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: DotNetEnv.Env.GetString("ISSUER"),
                 audience: DotNetEnv.Env.GetString("AUDIENCE"),
-                claims: claim,
+                claims: claim,  
                 expires: expiration,
                 signingCredentials: credentials 
             );

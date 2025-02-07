@@ -12,7 +12,8 @@ namespace AcologAPI.src.Application.Mappings
     {
         public DomainToDtoMappingProfile()
         {
-            CreateMap<Users, UserDTO>().ReverseMap();
+            CreateMap<Users, UserDTO>()
+                .ReverseMap();
         }
     }
 }

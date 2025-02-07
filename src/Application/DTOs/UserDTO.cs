@@ -30,5 +30,6 @@ namespace Application.DTOs
 
         [DefaultValue(2)]
         public TypeUser? Profile {get; set;}
+        public string? Token { get; internal set; }
     }
 }

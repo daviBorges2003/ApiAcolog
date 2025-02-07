@@ -10,6 +10,7 @@ using AcologAPI.src.Presentation.Controllers;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using AcologAPI.src.Application.Interfaces;
+using System.Text;
 
 namespace Application.Services
 {
@@ -17,16 +18,25 @@ namespace Application.Services
     {
         private readonly IUserRepository _repository;
         private readonly IMapper _mapper;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public UserServices(IUserRepository repos, IMapper mapper)
+        public UserServices(IUserRepository repos, IMapper mapper, IPasswordHasher passwordHasher)
         {
             _repository = repos;
             _mapper = mapper;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<UserDTO> Create(UserDTO userDTO)
         {
+
+            var passwordHashed = _passwordHasher.hashPassword(userDTO.Password);
+
             var user = _mapper.Map<Users>(userDTO);
+
+            user.PasswordHash = Encoding.UTF8.GetBytes(passwordHashed);
+            user.PasswordSalt = Encoding.UTF8.GetBytes(passwordHashed);
+
             var updatedUser = await _repository.Create(user);
 
             return _mapper.Map<UserDTO>(updatedUser);
@@ -62,9 +72,11 @@ namespace Application.Services
             return _mapper.Map<UserDTO>(user);
         }
 
-        public Users Login(LoginDTO loginDTO)
-        {
-            throw new NotImplementedException();
+        public async Task<UserDTO> Login(LoginDTO loginDTO)
+        {   
+            var user = await _repository.Login(loginDTO.Email , loginDTO.password);
+            
+            return _mapper.Map<UserDTO>(user);
         }
 
 

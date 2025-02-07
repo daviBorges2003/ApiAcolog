@@ -14,6 +14,6 @@ namespace Application.Interfaces
         Task<UserDTO> Delete(int id);
         Task<UserDTO> FindOne(int id);
         Task<IEnumerable<UserDTO>> FindAll(int pagina);
-        Users Login(LoginDTO loginDTO);
+        Task<UserDTO> Login(LoginDTO loginDTO);
     }
 }

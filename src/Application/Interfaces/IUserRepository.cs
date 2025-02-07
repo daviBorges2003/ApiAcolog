@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AcologAPI.src.Domain.Entities;
-using Application.DTOs;
+
 
 namespace AcologAPI.src.Application.Interfaces
 {
@@ -14,6 +14,6 @@ namespace AcologAPI.src.Application.Interfaces
         Task<Users> Delete(Users user);
         Task<Users> FindOne(int id);
         Task<IEnumerable<Users>> FindAll(int pagina);
-        Users Login(LoginDTO loginDTO);
+        Task<Users> Login(string email, string password);
     }
 }
