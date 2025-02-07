@@ -63,15 +63,9 @@ namespace AcologAPI.src.Infrastructure.Repositories
             return await _context.Users.Where(res => res.Id == id).FirstOrDefaultAsync();
         }
 
-        public Users Login(LoginDTO loginDTO)
+        public async Task<Users> Login(string email, string password)
         {
-            var adm = _context.Users.Where(
-                res => res.Email == loginDTO.Email && res.PasswordHash == loginDTO.PasswordHash
-            ).FirstOrDefault();
-
-            return adm;
+            return await _context.Users.Where(res => res.Email == email).FirstOrDefaultAsync();
         }
-
-
     }
 }
