@@ -52,6 +52,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 //Services
 builder.Services.AddScoped<IUsers, UserServices>();
 builder.Services.AddScoped<IAuthenticate, AuthenticateService>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
